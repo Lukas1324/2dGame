@@ -2,11 +2,13 @@ package main;
 
 import entity.Entity;
 import entity.Player;
-import object.SuperObject;
 import tile.TileManager;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 public class GamePanel extends JPanel implements Runnable {
     final int originalTileSize = 16;
@@ -41,8 +43,9 @@ public class GamePanel extends JPanel implements Runnable {
     public Player player = new Player(this, keyH);
 
     //Entity and Object
-    public SuperObject obj[] = new SuperObject[10];
+    public Entity obj[] = new Entity[10];
     public Entity npc[] = new Entity[10];
+    ArrayList<Entity> entityList = new ArrayList<>();
     public CollisionChecker collsionChecker = new CollisionChecker(this);
     public AssetSetter assetSetter = new AssetSetter(this);
     public UI ui = new UI(this);
@@ -122,25 +125,45 @@ public class GamePanel extends JPanel implements Runnable {
             if (keyH.checkDrawTime == true) {
                 drawStart = System.nanoTime();
             }
+
             tileManager.draw(g2);
 
-            //Tiles
-            for (int i = 0; i< obj.length; i++){
-                if (obj[i] != null){
-                    obj[i].draw(g2,this);
-                }
-            }
-
-            //NPC
-            for (int i = 0; i< npc.length; i++){
+            //Add Entity and Objects in the list
+            entityList.add(player);
+            for(int i = 0; i < npc.length; i++){
                 if (npc[i] != null){
-                    npc[i].draw(g2);
+                    entityList.add(npc[i]);
+                }
+            }
+            for(int i = 0; i < obj.length; i++){
+                if (obj[i] != null){
+                    entityList.add(obj[i]);
                 }
             }
 
+            //Sort
+            Collections.sort(entityList, new Comparator<Entity>() {
+                @Override
+                public int compare(Entity o1, Entity o2) {
+                    if(o1.worldY > o2.worldY){
+                        return 1;
+                    }else if (o1.worldY < o2.worldY){
+                        return -1;
+                    }else{
+                        return 0;
+                    }
+
+                }
+            });
+            //Draw Entities
+            for(int i = 0; i < entityList.size(); i++){
+                entityList.get(i).draw(g2);
+            }
+            //Empty List
+            entityList.clear();
 
 
-            player.draw(g2);
+
             ui.draw(g2);
 
             //DEBUG
