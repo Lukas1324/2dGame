@@ -71,6 +71,9 @@ public class Player extends Entity{
             int npcIndex = gp.collsionChecker.checkEntity(this,gp.npc);
             interactNPC(npcIndex);
 
+            //Check Event
+            gp.eventHandler.checkEvent();
+
             if (collisionOn == false) {
                 switch (direction) {
                     case "up":
