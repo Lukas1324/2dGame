@@ -1,9 +1,8 @@
 package main;
 
 import entity.NPC_OldMan;
-import entity.NPC_YoungGirl;
+import monster.MO_GreenSlime;
 import object.OBJ_Boots;
-import object.OBJ_Chest;
 import object.OBJ_Door;
 import object.OBJ_Key;
 
@@ -52,5 +51,15 @@ public class AssetSetter {
         gp.npc[1].worldY = gp.tileSize*7;
 
          */
+    }
+
+    public void setMonster(){
+        gp.monster[0] = new MO_GreenSlime(gp);
+        gp.monster[0].worldY = gp.tileSize * 3;
+        gp.monster[0].worldX = gp.tileSize * 3;
+
+        gp.monster[1] = new MO_GreenSlime(gp);
+        gp.monster[1].worldY = gp.tileSize * 4;
+        gp.monster[1].worldX = gp.tileSize * 4;
     }
 }

@@ -5,7 +5,6 @@ import main.GamePanel;
 import java.util.Random;
 
 public class NPC_OldMan extends Entity{
-    int actionLockCounter = 0;
     Random r = new Random();
     public NPC_OldMan(GamePanel gp){
         super(gp);

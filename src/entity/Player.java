@@ -6,6 +6,8 @@ import main.KeyHandler;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 
+import static java.awt.Font.BOLD;
+
 
 public class Player extends Entity{
     KeyHandler keyH;
@@ -45,6 +47,7 @@ public class Player extends Entity{
     }
 
     public void update(){
+
         if (keyH.upPressed || keyH.downPressed || keyH.leftPressed || keyH.rightPressed) {
             if (keyH.upPressed) {
                 direction = "up";
@@ -70,6 +73,9 @@ public class Player extends Entity{
             //Check NPC Collsion
             int npcIndex = gp.collsionChecker.checkEntity(this,gp.npc);
             interactNPC(npcIndex);
+
+            int monsterIndex = gp.collsionChecker.checkEntity(this,gp.monster);
+            contactMonster(monsterIndex);
 
             //Check Event
             gp.eventHandler.checkEvent();
@@ -105,8 +111,23 @@ public class Player extends Entity{
         }
 
 
+        if(invincible == true){
+            invincibleCounter++;
+            if (invincibleCounter > 20){
+                invincibleCounter = 0;
+                invincible = false;
+            }
+        }
 
+    }
 
+    public void contactMonster(int i){
+        if(i != 999){
+            if(invincible == false){
+                life -= 1;
+                invincible = true;
+            }
+        }
     }
 
     public void interactNPC(int i){
@@ -166,11 +187,6 @@ public class Player extends Entity{
 
 
     public void draw(Graphics2D g2){
-        /*
-        g2.setColor(Color.white);
-        g2.fillRect(x,y,gp.tileSize,gp.tileSize);
-         */
-
         BufferedImage image = null;
         switch (direction){
             case "up":
@@ -206,17 +222,12 @@ public class Player extends Entity{
 
                 break;
         }
-
-
+        if(invincible == true){
+            g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.3f));
+        }
         g2.drawImage(image, screenX, screenY,gp.tileSize, gp.tileSize, null);
 
-        /*
-        g2.setColor(Color.red);
-        g2.drawRect(this.screenX - (speed/2) + solidArea.x, this.screenY - speed/2 + solidArea.y, gp.player.solidArea.width + gp.player.speed/2, gp.player.solidArea.height + gp.player.speed/2);
-
-        g2.setColor(Color.black);
-        g2.drawRect(screenX,screenY,10,10);
-
-         */
+        //Reset Composite
+        g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f));
     }
 }
