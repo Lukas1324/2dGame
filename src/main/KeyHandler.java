@@ -21,13 +21,6 @@ public class KeyHandler implements KeyListener {
     public void keyPressed(KeyEvent e) {
         int code = e.getKeyCode();
 
-
-        //EnterCounter If Enter is Pressed it should be pressed for 0,5 sec
-        if (enterPressed == true){
-            enterCounter();
-        }
-
-
         //TitleScreenState
         if(gp.gameState == gp.titleScreenState){
             if(gp.ui.subTitleScreenState == 0){
@@ -126,14 +119,6 @@ public class KeyHandler implements KeyListener {
 
 
 
-    }
-
-    private void enterCounter(){
-        enterCounter++;
-        if (enterCounter == 4){
-            enterCounter = 0;
-            enterPressed = false;
-        }
     }
 
     @Override

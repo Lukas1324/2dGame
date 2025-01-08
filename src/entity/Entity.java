@@ -16,6 +16,7 @@ public class Entity {
     int dialogeIndex = 0;
 
     public BufferedImage up1, up2, down1, down2, left1, left2, right1, right2;
+    public BufferedImage attackUp1, attackUp2, attackDown1, attackDown2, attackLeft1, attackLeft2, attackRight1, attackRight2;
     public String direction = "down";
     public int actionLockCounter = 0;
     public boolean invincible = false;
@@ -153,6 +154,19 @@ public class Entity {
             }
             g2.drawImage(image,screenX,screenY,gp.tileSize, gp.tileSize,null);
         }
+    }
+
+    public BufferedImage setUp(String imagePath, int width, int height){
+        UtilityTool uTool = new UtilityTool();
+        BufferedImage image = null;
+        try{
+            image = ImageIO.read(getClass().getResourceAsStream(imagePath + ".png"));
+            image = uTool.scaleImage(image,width,height);
+            System.out.println("JA ich wurde geladen");
+        }catch (IOException e){
+            e.printStackTrace();
+        }
+        return image;
     }
 
     public BufferedImage setUp(String imagePath){
