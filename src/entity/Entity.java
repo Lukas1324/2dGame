@@ -24,6 +24,7 @@ public class Entity {
     public int spriteCounter = 0;
     public int spriteNum = 1;
     public Rectangle solidArea = new Rectangle(0,0,48,48);
+    public Rectangle attackArea = new Rectangle(0,0,0,0);
     public int solidAreaDefaultX, solidAreaDefaultY;
     public boolean collisionOn = false;
 
@@ -103,6 +104,14 @@ public class Entity {
 
                 spriteCounter = 0;
             }
+
+            if(invincible == true){
+                invincibleCounter++;
+                if (invincibleCounter > 10){
+                    invincibleCounter = 0;
+                    invincible = false;
+                }
+            }
         }
     }
 
@@ -152,7 +161,11 @@ public class Entity {
 
                     break;
             }
+            if(invincible == true){
+                g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.4f));
+            }
             g2.drawImage(image,screenX,screenY,gp.tileSize, gp.tileSize,null);
+            g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f));
         }
     }
 
@@ -162,7 +175,6 @@ public class Entity {
         try{
             image = ImageIO.read(getClass().getResourceAsStream(imagePath + ".png"));
             image = uTool.scaleImage(image,width,height);
-            System.out.println("JA ich wurde geladen");
         }catch (IOException e){
             e.printStackTrace();
         }

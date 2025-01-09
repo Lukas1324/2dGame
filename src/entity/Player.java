@@ -31,6 +31,9 @@ public class Player extends Entity{
         solidArea.height = 32;
         solidArea.width = 32;
 
+        attackArea.width = 36;
+        attackArea.height = 36;
+
         setDefaultValues();
         getPlayerImage();
         getPlayerAttackImage();
@@ -154,6 +157,31 @@ public class Player extends Entity{
         }
         if(spriteCounter>5 && spriteCounter < 25){
             spriteNum = 2;
+
+            int currentWorldX = worldX;
+            int currentWorldY = worldY;
+            int solidAreaWidth = solidArea.width;
+            int solidAreaHeight = solidArea.height;
+
+            switch (direction){
+                case "up": worldY -= attackArea.height;break;
+                case "down": worldY += attackArea.height;break;
+                case "right": worldX += attackArea.width;break;
+                case "left": worldX -= attackArea.width; break;
+            }
+
+            solidArea.width = attackArea.width;
+            solidArea.height = attackArea.height;
+
+            int monsterIndex = gp.collsionChecker.checkEntity(this, gp.monster);
+            damageMonster(monsterIndex);
+
+            worldX = currentWorldX;
+            worldY = currentWorldY;
+            solidArea.width = solidAreaWidth;
+            solidArea.height = solidAreaHeight;
+
+
         }
         if(spriteCounter > 25){
             spriteNum = 1;
@@ -217,6 +245,18 @@ public class Player extends Entity{
         attackRight2 = setUp("/player/boy_attack_right_2", gp.tileSize * 2, gp.tileSize);
         attackLeft1 = setUp("/player/boy_attack_left_1", gp.tileSize * 2, gp.tileSize);
         attackLeft2 = setUp("/player/boy_attack_left_2", gp.tileSize * 2, gp.tileSize);
+    }
+
+    public void damageMonster(int i){
+        if (i != 999){
+            if (gp.monster[i].invincible == false){
+                gp.monster[i].life -= 1;
+                gp.monster[i].invincible = true;
+                if(gp.monster[i].life <= 0){
+                    gp.monster[i] = null;
+                }
+            }
+        }
     }
 
 
